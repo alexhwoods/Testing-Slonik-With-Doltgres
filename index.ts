@@ -1,6 +1,10 @@
 import { createPool, sql } from "slonik";
 
-const pool = await createPool("postgresql://doltgres@localhost:5438/foo");
+if (!process.env.POSTGRES_URL) {
+  throw new Error("POSTGRES_URL is required");
+}
+
+const pool = await createPool(process.env.POSTGRES_URL);
 
 async function main() {
   const result = await pool.one(sql.unsafe`select now()`);
